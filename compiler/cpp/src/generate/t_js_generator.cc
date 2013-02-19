@@ -17,7 +17,6 @@
  * under the License.
  */
 
-#include <map>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -30,14 +29,8 @@
 #include "platform.h"
 #include "version.h"
 
-using std::map;
-using std::ofstream;
-using std::ostringstream;
-using std::string;
-using std::stringstream;
-using std::vector;
+using namespace std;
 
-static const string endl = "\n";  // avoid ostream << std::endl flushes
 
 #include "t_oop_generator.h"
 
@@ -174,6 +167,7 @@ class t_js_generator : public t_oop_generator {
   std::string function_signature(t_function* tfunction, std::string prefix="", bool include_callback=false);
   std::string argument_list(t_struct* tstruct, bool include_callback=false);
   std::string type_to_enum(t_type* ttype);
+  std::string type_name(t_type* ttype);
 
   std::string autogen_comment() {
     return
@@ -270,7 +264,8 @@ void t_js_generator::init_generator() {
   // Print header
   f_types_ <<
     autogen_comment() <<
-    js_includes() << endl;
+    js_includes() << endl <<
+    render_includes() << endl;
 
   if (gen_node_) {
     f_types_ << "var ttypes = module.exports = {};" << endl;
@@ -517,6 +512,18 @@ void t_js_generator::generate_js_struct_definition(ofstream& out,
   const vector<t_field*>& members = tstruct->get_members();
   vector<t_field*>::const_iterator m_iter;
 
+  if (gen_node_ && is_exported) {
+    indent_up();
+    out << js_namespace(tstruct->get_program()) << tstruct->get_name() << "_typedef" << " = " <<
+      "module.exports." << tstruct->get_name() << "_typedef" << " = {\n";
+    for (m_iter = members.begin(); m_iter != members.end(); ++m_iter) {
+      t_type* t = get_true_type((*m_iter)->get_type());
+      out << indent() << "this." << (*m_iter)->get_name() << " = \"" << type_name(t) << "\";" << endl;
+    }
+    indent_down();
+    out << "};\n";
+  }
+
   indent_up();
 
   if (gen_node_) {
@@ -590,7 +597,7 @@ void t_js_generator::generate_js_struct_definition(ofstream& out,
     out << "Thrift.inherits(" <<
         js_namespace(tstruct->get_program()) <<
         tstruct->get_name() << ", Thrift.TException);" << endl;
-	out << js_namespace(tstruct->get_program())<<tstruct->get_name() <<".prototype.name = '" << tstruct->get_name() << "';" << endl;
+  out << js_namespace(tstruct->get_program())<<tstruct->get_name() <<".prototype.name = '" << tstruct->get_name() << "';" << endl;
   } else {
     //init prototype
     out << js_namespace(tstruct->get_program())<<tstruct->get_name() <<".prototype = {};\n";
@@ -1657,6 +1664,40 @@ void t_js_generator::generate_serialize_list_element(ofstream &out,
                                                        string iter) {
   t_field efield(tlist->get_elem_type(), iter);
   generate_serialize_field(out, &efield);
+}
+
+string t_js_generator::type_name(t_type* ttype) {
+  // In Java typedefs are just resolved to their real type
+  ttype = get_true_type(ttype);
+  string prefix;
+
+  if (ttype->is_map()) {
+    t_map* tmap = (t_map*) ttype;
+    prefix = "map";
+
+    return prefix + "<" +
+                     type_name(tmap->get_key_type()) + "," +
+                     type_name(tmap->get_val_type()) + ">";
+  } else if (ttype->is_set()) {
+    t_set* tset = (t_set*) ttype;
+    prefix = "set";
+    return prefix + "<" + type_name(tset->get_elem_type()) + ">";
+  } else if (ttype->is_list()) {
+    t_list* tlist = (t_list*) ttype;
+    prefix = "list";
+    return prefix + "<" + type_name(tlist->get_elem_type()) + ">";
+  }
+
+  // Check for namespacing
+  t_program* program = ttype->get_program();
+  if (program != NULL && program != program_) {
+    string package = program->get_name();
+    if (!package.empty()) {
+      return package + "." + ttype->get_name();
+    }
+  }
+
+  return ttype->get_name();
 }
 
 /**
