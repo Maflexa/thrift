@@ -1,5 +1,14 @@
 Apache Thrift
 
+Build from source, first do this
+================================
+
+brew install libtool pkg-config 
+
+./compiler/cpp/src/thriftl.ll is patched becasue of:
+https://issues.apache.org/jira/browse/THRIFT-1614
+
+
 Last Modified: 2010-Nov-04
 
 License
