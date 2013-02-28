@@ -1,12 +1,15 @@
 Apache Thrift
 
-Build from source, first do this
+Build from source
 ================================
 
-brew install libtool pkg-config 
+1. `brew install libtool pkg-config`
+2. `./bootstrap.sh`
+3. `./configure`
+4. `make`
+5. `sudo make install` only if you want to override
 
-./compiler/cpp/src/thriftl.ll is patched becasue of:
-https://issues.apache.org/jira/browse/THRIFT-1614
+./compiler/cpp/src/thriftl.ll is patched becasue of [THRIFT-1614](https://issues.apache.org/jira/browse/THRIFT-1614)
 
 
 Last Modified: 2010-Nov-04
