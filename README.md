@@ -2,11 +2,11 @@
 
 ## Build from source
 
-1. `brew install libtool pkg-config`
-2. `./bootstrap.sh`
-3. `./configure`
-4. `make`
-5. `sudo make install` only if you want to override
+You'll need these two packages from [Homebrew](http://mxcl.github.com/homebrew/):
+
+	brew install libtool pkg-config
+	
+Then continue with the normal [installation](#installation).
 
 ./compiler/cpp/src/thriftl.ll is patched becasue of [THRIFT-1614](https://issues.apache.org/jira/browse/THRIFT-1614)
 
@@ -100,6 +100,10 @@ Once the configure scripts are generated, thrift can be configured.
 From the top directory, do:
 
 	./configure
+	
+Unless you're a ruby nerd, you may want to go on without it:
+
+	./configure --without-ruby
 
 You may need to specify the location of the boost files explicitly.
 If you installed boost in /usr/local, you would run configure as follows:
