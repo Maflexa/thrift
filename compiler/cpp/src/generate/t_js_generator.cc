@@ -519,7 +519,7 @@ void t_js_generator::generate_js_struct_definition(ofstream& out,
       "module.exports." << tstruct->get_name() << "_typedef" << " = {\n";
     for (m_iter = members.begin(); m_iter != members.end(); ++m_iter) {
       t_type* t = get_true_type((*m_iter)->get_type());
-      out << indent() << "this." << (*m_iter)->get_name() << " = \"" << type_name(t) << "\";" << endl;
+      out << indent() << (*m_iter)->get_name() << " : '" << type_name(t) << "'," << endl;
     }
     indent_down();
     out << "};\n";
