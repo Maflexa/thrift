@@ -1,7 +1,6 @@
-Apache Thrift
+# Apache Thrift
 
-Build from source
-================================
+## Build from source
 
 1. `brew install libtool pkg-config`
 2. `./bootstrap.sh`
@@ -14,8 +13,7 @@ Build from source
 
 Last Modified: 2010-Nov-04
 
-License
-=======
+## License
 
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements. See the NOTICE file
@@ -34,8 +32,7 @@ KIND, either express or implied. See the License for the
 specific language governing permissions and limitations
 under the License.
 
-Introduction
-============
+## Introduction
 
 Thrift is a lightweight, language-independent software stack with an
 associated code generation mechanism for RPC. Thrift provides clean
@@ -51,55 +48,47 @@ For more details on Thrift's design and implementation, take a gander at
 the Thrift whitepaper included in this distribution or at the README files
 in your particular subdirectory of interest.
 
-Hierarchy
-=========
+## Hierarchy
 
-thrift/
+- thrift/
+  - compiler/
+  	> Contains the Thrift compiler, implemented in C++.
 
-  compiler/
-    Contains the Thrift compiler, implemented in C++.
-
-  lib/
-    Contains the Thrift software library implementation, subdivided by
+  - lib/
+    > Contains the Thrift software library implementation, subdivided by
     language of implementation.
 
-    cpp/
-    java/
-    php/
-    py/
-    rb/
+    - cpp/
+    - java/
+    - php/
+    - py/
+    - rb/
 
-  test/
-
-    Contains sample Thrift files and test code across the target programming
+  - test/
+    > Contains sample Thrift files and test code across the target programming
     languages.
 
-  tutorial/
-
-    Contains a basic tutorial that will teach you how to develop software
+  - tutorial/
+	> Contains a basic tutorial that will teach you how to develop software
     using Thrift.
 
-Requirements
-============
+## Requirements
 
 See http://wiki.apache.org/thrift/ThriftRequirements for
 an up-to-date list of build requirements.
 
-Resources
-=========
+## Resources
 
 More information about Thrift can be obtained on the Thrift webpage at:
 
      http://thrift.apache.org
 
-Acknowledgments
-===============
+## Acknowledgments
 
 Thrift was inspired by pillar, a lightweight RPC tool written by Adam D'Angelo,
 and also by Google's protocol buffers.
 
-Installation
-============
+## Installation
 
 If you are building from the first time out of the source repository, you will
 need to generate the configure scripts.  (This is not necessary if you
