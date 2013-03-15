@@ -25,7 +25,7 @@ uses
   SysUtils, Thrift.Protocol;
 
 const
-  Version = '0.9.0';
+  Version = '1.0.0-devnhan';
 
 type
   IProcessor = interface
