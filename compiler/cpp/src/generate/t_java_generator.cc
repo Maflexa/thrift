@@ -272,6 +272,7 @@ public:
   void generate_struct_desc(ofstream& out, t_struct* tstruct);
   void generate_field_descs(ofstream& out, t_struct* tstruct);
   void generate_field_name_constants(ofstream& out, t_struct* tstruct);
+  void generate_parameter_map(std::ofstream& out, t_function* tfunction);
 
   bool type_can_be_null(t_type* ttype) {
     ttype = get_true_type(ttype);
@@ -2253,6 +2254,7 @@ void t_java_generator::generate_service_interface(t_service* tservice) {
   vector<t_function*> functions = tservice->get_functions();
   vector<t_function*>::iterator f_iter;
   for (f_iter = functions.begin(); f_iter != functions.end(); ++f_iter) {
+    generate_parameter_map(f_service_, *f_iter);
     generate_java_doc(f_service_, *f_iter);
     indent(f_service_) << "public " << function_signature(*f_iter) << ";" << endl << endl;
   }
@@ -3368,6 +3370,30 @@ string t_java_generator::function_signature(t_function* tfunction,
   }
   result += "org.apache.thrift.TException";
   return result;
+}
+
+void t_java_generator::generate_parameter_map(std::ofstream& out, t_function* tfunction) {
+  out << indent() << "public static final Map<String, Integer> ";
+  out << tfunction->get_name() + "_paramMap = ";
+  out << "new HashMap<String, Integer>(){{" << endl;
+
+  const vector<t_field*>& fields = tfunction->get_arglist()->get_members();
+  vector<t_field*>::const_iterator f_iter;
+  
+  indent_up();
+  int idx = 0;
+  for (f_iter = fields.begin(); f_iter != fields.end(); ++f_iter) {
+    stringstream ss;
+    ss << idx;
+    string str_idx = ss.str();
+
+    out << indent() << "put(\"" << (*f_iter)->get_name() << "\", ";
+    out << str_idx + ");" << endl;
+    idx++;
+  }
+  indent_down();
+
+  out << indent() << "}};" << endl << endl;      
 }
 
 /**
