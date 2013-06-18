@@ -1,6 +1,6 @@
 {
   "name": "thrift-nodejs-test",
-  "version": "1.0.0-devnhan",
+  "version": "1.0.1-devnhan",
   "description": "node.js test server and client for the Apache Thrift",
   "homepage": "http://thrift.apache.org/",
   "repository":

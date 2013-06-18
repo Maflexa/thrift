@@ -19,7 +19,7 @@
 
 AC_PREREQ(2.65)
 
-AC_INIT([thrift], [1.0.0-devnhan])
+AC_INIT([thrift], [1.0.1-devnhan])
 
 AC_CONFIG_AUX_DIR([.])
 
