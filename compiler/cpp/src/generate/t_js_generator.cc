@@ -1004,11 +1004,14 @@ void t_js_generator::generate_service_client(t_service* tservice) {
       indent() << "};" << endl;
 
 
+  f_service_ << js_namespace(tservice->get_program()) << service_name_ << "MethodDefs = " <<
+  "exports.MethodDefs = {};" << endl;
+
   if (tservice->get_extends() != NULL) {
     indent(f_service_) << "Thrift.inherits(" <<
         js_namespace(tservice->get_program()) <<
         service_name_ << "Client, " <<
-        tservice->get_extends()->get_name() << "Client)" << endl;
+        tservice->get_extends()->get_name() << "Client);" << endl;
   } else {
       //init prototype
       indent(f_service_) <<  js_namespace(tservice->get_program())<<service_name_ << "Client.prototype = {};"<<endl;
@@ -1023,6 +1026,31 @@ void t_js_generator::generate_service_client(t_service* tservice) {
     vector<t_field*>::const_iterator fld_iter;
     string funname = (*f_iter)->get_name();
     string arglist = argument_list(arg_struct);
+
+    // Add input param type defs
+    f_service_ << indent() << js_namespace(tservice->get_program()) << service_name_ << "MethodDefs." << funname << " = [" << endl;
+    indent_up();
+
+    bool first = true;
+    for (fld_iter = fields.begin(); fld_iter != fields.end(); ++fld_iter) {
+      if(first){
+        first = false;
+      } else {
+        f_service_ << "," << endl;
+      }
+      f_service_ << indent() << "{ type: '" << type_name((*fld_iter)->get_type()) << "', name: '" << (*fld_iter)->get_name() << "'}";
+    }
+    f_service_ << endl;
+    indent_down();
+    f_service_ << indent() << "];" << endl;
+
+    // Add return type
+    f_service_ << indent() << js_namespace(tservice->get_program()) << service_name_ << "MethodDefs." << funname << "_return = ";
+    if ((*f_iter)->get_returntype()->is_void()){
+      f_service_ << "'void';" << endl;
+    } else {
+      f_service_ << "'" << type_name((*f_iter)->get_returntype()) << "';" << endl;
+    }
 
     // Open function
     f_service_ <<  js_namespace(tservice->get_program())<<service_name_<<"Client.prototype." <<
