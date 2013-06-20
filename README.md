@@ -77,6 +77,10 @@ in your particular subdirectory of interest.
 See http://wiki.apache.org/thrift/ThriftRequirements for
 an up-to-date list of build requirements.
 
+For ubuntu:
+
+    sudo apt-get install libboost-dev libboost-test-dev libboost-program-options-dev libevent-dev automake libtool flex bison pkg-config g++ libssl-dev 
+
 ## Resources
 
 More information about Thrift can be obtained on the Thrift webpage at:
@@ -103,7 +107,7 @@ From the top directory, do:
 	
 Unless you're a ruby nerd, you may want to go on without it:
 
-	./configure --without-ruby
+	./configure --without-ruby --without-erlang
 
 You may need to specify the location of the boost files explicitly.
 If you installed boost in /usr/local, you would run configure as follows:
